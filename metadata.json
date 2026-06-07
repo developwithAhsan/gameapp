@@ -1,0 +1,6 @@
+{
+  "name": "Block Puzzle Classic",
+  "description": "A modern, highly polished mobile block puzzle game featuring a beautiful 10x10 board, vibrant 3D gradient blocks, row-clearing combos, and strategic offline-ready puzzle gameplay.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
