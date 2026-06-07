@@ -139,6 +139,8 @@ fun MainMenuScreen(viewModel: GameViewModel) {
 
     val context = LocalContext.current
     val activity = context as? Activity
+    val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+    val isCompactWatch = configuration.screenWidthDp < 450 || configuration.screenHeightDp < 450
 
     Box(
         modifier = Modifier
@@ -150,49 +152,57 @@ fun MainMenuScreen(viewModel: GameViewModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = 60.dp, start = 24.dp, end = 24.dp, top = 16.dp),
+                .padding(
+                    bottom = if (isCompactWatch) 10.dp else 60.dp,
+                    start = if (isCompactWatch) 8.dp else 24.dp,
+                    end = if (isCompactWatch) 8.dp else 24.dp,
+                    top = if (isCompactWatch) 8.dp else 16.dp
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(if (isCompactWatch) 8.dp else 20.dp)
         ) {
             // High Score banner styled with a fine indigo border and deep-blue backing
             Row(
                 modifier = Modifier
-                    .padding(top = 8.dp)
-                    .background(Color(0x1F1E293B), RoundedCornerShape(12.dp))
-                    .border(1.dp, Color(0x33818CF8), RoundedCornerShape(12.dp))
-                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                    .padding(top = if (isCompactWatch) 2.dp else 8.dp)
+                    .background(Color(0x1F1E293B), RoundedCornerShape(if (isCompactWatch) 6.dp else 12.dp))
+                    .border(1.dp, Color(0x33818CF8), RoundedCornerShape(if (isCompactWatch) 6.dp else 12.dp))
+                    .padding(
+                        horizontal = if (isCompactWatch) 8.dp else 20.dp,
+                        vertical = if (isCompactWatch) 4.dp else 10.dp
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = "High Score",
                     tint = Color(0xFFFACC15), // bright yellow-400
-                    modifier = Modifier.size(22.dp)
+                    modifier = Modifier.size(if (isCompactWatch) 12.dp else 22.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(if (isCompactWatch) 4.dp else 8.dp))
                 Text(
                     text = "BEST SCORE: $highScore",
                     color = Color.White.copy(alpha = 0.9f),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp,
-                    letterSpacing = 1.5.sp
+                    fontSize = if (isCompactWatch) 10.sp else 14.sp,
+                    letterSpacing = if (isCompactWatch) 0.5.sp else 1.5.sp
                 )
             }
 
             // Title Branding Logo
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(vertical = 12.dp)
+                modifier = Modifier.padding(vertical = if (isCompactWatch) 2.dp else 12.dp)
             ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(if (isCompactWatch) 2.dp else 6.dp)) {
                     LogoBlock(char = 'B', colorIdx = 1)
                     LogoBlock(char = 'L', colorIdx = 2)
                     LogoBlock(char = 'O', colorIdx = 3)
                     LogoBlock(char = 'C', colorIdx = 4)
                     LogoBlock(char = 'K', colorIdx = 5)
                 }
-                Spacer(modifier = Modifier.height(10.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Spacer(modifier = Modifier.height(if (isCompactWatch) 2.dp else 10.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(if (isCompactWatch) 2.dp else 6.dp)) {
                     LogoBlock(char = 'P', colorIdx = 6)
                     LogoBlock(char = 'U', colorIdx = 1)
                     LogoBlock(char = 'Z', colorIdx = 2)
@@ -200,13 +210,13 @@ fun MainMenuScreen(viewModel: GameViewModel) {
                     LogoBlock(char = 'L', colorIdx = 4)
                     LogoBlock(char = 'E', colorIdx = 5)
                 }
-                Spacer(modifier = Modifier.height(14.dp))
+                Spacer(modifier = Modifier.height(if (isCompactWatch) 4.dp else 14.dp))
                 Text(
                     text = "C L A S S I C",
                     color = Color(0xFF22D3EE), // Beautiful Cyan-400
                     fontWeight = FontWeight.Light,
-                    fontSize = 20.sp,
-                    letterSpacing = 5.sp
+                    fontSize = if (isCompactWatch) 10.sp else 20.sp,
+                    letterSpacing = if (isCompactWatch) 2.sp else 5.sp
                 )
             }
 
@@ -219,28 +229,28 @@ fun MainMenuScreen(viewModel: GameViewModel) {
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF06B6D4) // Cyan 500
                 ),
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(if (isCompactWatch) 8.dp else 14.dp),
                 modifier = Modifier
-                    .fillMaxWidth(0.85f)
-                    .height(58.dp)
+                    .fillMaxWidth(if (isCompactWatch) 0.95f else 0.85f)
+                    .height(if (isCompactWatch) 38.dp else 58.dp)
                     .scale(pulseScale)
-                    .border(1.dp, Color(0xFF22D3EE).copy(alpha = 0.5f), RoundedCornerShape(14.dp))
+                    .border(1.dp, Color(0xFF22D3EE).copy(alpha = 0.5f), RoundedCornerShape(if (isCompactWatch) 8.dp else 14.dp))
                     .testTag("play_game_button"),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = if (isCompactWatch) 2.dp else 6.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
                     contentDescription = null,
-                    modifier = Modifier.size(26.dp),
+                    modifier = Modifier.size(if (isCompactWatch) 14.dp else 26.dp),
                     tint = Color.White
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(if (isCompactWatch) 4.dp else 8.dp))
                 Text(
                     text = "ADVENTURE (LEVELS)",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 17.sp,
-                    letterSpacing = 1.sp
+                    fontSize = if (isCompactWatch) 11.sp else 17.sp,
+                    letterSpacing = if (isCompactWatch) 0.5.sp else 1.sp
                 )
             }
 
@@ -252,36 +262,38 @@ fun MainMenuScreen(viewModel: GameViewModel) {
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Transparent
                 ),
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(if (isCompactWatch) 8.dp else 14.dp),
                 modifier = Modifier
-                    .fillMaxWidth(0.85f)
-                    .height(54.dp)
-                    .border(1.5.dp, Color(0x7F818CF8), RoundedCornerShape(14.dp))
+                    .fillMaxWidth(if (isCompactWatch) 0.95f else 0.85f)
+                    .height(if (isCompactWatch) 36.dp else 54.dp)
+                    .border(1.dp, Color(0x7F818CF8), RoundedCornerShape(if (isCompactWatch) 8.dp else 14.dp))
                     .testTag("endless_game_button"),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = if (isCompactWatch) 1.dp else 2.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(if (isCompactWatch) 12.dp else 20.dp),
                     tint = Color(0xFF818CF8)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(if (isCompactWatch) 4.dp else 8.dp))
                 Text(
                     text = "CLASSIC (ENDLESS)",
                     color = Color(0xFFE2E8F0),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
-                    letterSpacing = 1.sp
+                    fontSize = if (isCompactWatch) 11.sp else 15.sp,
+                    letterSpacing = if (isCompactWatch) 0.5.sp else 1.sp
                 )
             }
 
             // Beautiful AdMob Native Ad Card placed perfectly in the center segment
-            AdManager.NativeAdCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
+            if (!isCompactWatch) {
+                AdManager.NativeAdCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
+                )
+            }
 
             IconButton(
                 onClick = {
@@ -291,29 +303,37 @@ fun MainMenuScreen(viewModel: GameViewModel) {
                 modifier = Modifier
                     .background(Color(0x0FFFFFFF), CircleShape)
                     .border(1.dp, Color.White.copy(alpha = 0.15f), CircleShape)
-                    .size(54.dp)
+                    .size(if (isCompactWatch) 36.dp else 54.dp)
                     .testTag("settings_button")
             ) {
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = "Settings",
                     tint = Color.White,
-                    modifier = Modifier.size(26.dp)
+                    modifier = Modifier.size(if (isCompactWatch) 18.dp else 26.dp)
                 )
             }
         }
 
         // Anchor Banner Ad to the bottom overlay
-        AdManager.BannerAdView(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        )
+        if (!isCompactWatch) {
+            AdManager.BannerAdView(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            )
+        }
     }
 }
 
 @Composable
 fun LogoBlock(char: Char, colorIdx: Int) {
+    val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+    val isCompactWatch = configuration.screenWidthDp < 450 || configuration.screenHeightDp < 450
+    val blockSize = if (isCompactWatch) 22.dp else 45.dp
+    val fontSizeOuter = if (isCompactWatch) 12.sp else 24.sp
+    val cornerRadiusValue = if (isCompactWatch) 4.dp else 8.dp
+
     val (baseColor, accentColor) = when (colorIdx) {
         1 -> Pair(Color(0xFFEF4444), Color(0xFFFCA5A5))
         2 -> Pair(Color(0xFF06B6D4), Color(0xFF67E8F9))
@@ -326,11 +346,11 @@ fun LogoBlock(char: Char, colorIdx: Int) {
     
     Box(
         modifier = Modifier
-            .size(45.dp)
-            .clip(RoundedCornerShape(8.dp))
+            .size(blockSize)
+            .clip(RoundedCornerShape(cornerRadiusValue))
             .background(baseColor)
-            .border(1.dp, accentColor.copy(alpha = 0.4f), RoundedCornerShape(8.dp))
-            .padding(2.dp)
+            .border(1.dp, accentColor.copy(alpha = 0.4f), RoundedCornerShape(cornerRadiusValue))
+            .padding(if (isCompactWatch) 1.dp else 2.dp)
             .drawBehind {
                 // Inline glass highlights representing Geometric Balance top reflection
                 drawRoundRect(
@@ -339,7 +359,7 @@ fun LogoBlock(char: Char, colorIdx: Int) {
                         startY = 0f,
                         endY = size.height * 0.4f
                     ),
-                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(6.dp.toPx())
+                    cornerRadius = androidx.compose.ui.geometry.CornerRadius(cornerRadiusValue.toPx())
                 )
             },
         contentAlignment = Alignment.Center
@@ -348,14 +368,14 @@ fun LogoBlock(char: Char, colorIdx: Int) {
             text = char.toString(),
             color = Color.Black.copy(alpha = 0.22f),
             fontWeight = FontWeight.ExtraBold,
-            fontSize = 24.sp,
-            modifier = Modifier.offset(1.dp, 1.dp)
+            fontSize = fontSizeOuter,
+            modifier = Modifier.offset(if (isCompactWatch) 0.5.dp else 1.dp, if (isCompactWatch) 0.5.dp else 1.dp)
         )
         Text(
             text = char.toString(),
             color = Color.White,
             fontWeight = FontWeight.ExtraBold,
-            fontSize = 24.sp
+            fontSize = fontSizeOuter
         )
     }
 }
@@ -431,6 +451,9 @@ fun GameplayScreen(viewModel: GameViewModel) {
     
     var ghostPlacement by remember { mutableStateOf<Pair<Int, Int>?>(null) }
 
+    val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+    val isCompactWatch = configuration.screenWidthDp < 450 || configuration.screenHeightDp < 450
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -440,7 +463,12 @@ fun GameplayScreen(viewModel: GameViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 64.dp),
+                .padding(
+                    start = if (isCompactWatch) 6.dp else 16.dp,
+                    end = if (isCompactWatch) 6.dp else 16.dp,
+                    top = if (isCompactWatch) 6.dp else 16.dp,
+                    bottom = if (isCompactWatch) 8.dp else 64.dp
+                ),
             verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -448,7 +476,11 @@ fun GameplayScreen(viewModel: GameViewModel) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp, start = 8.dp, end = 8.dp),
+                    .padding(
+                        top = if (isCompactWatch) 2.dp else 12.dp,
+                        start = if (isCompactWatch) 2.dp else 8.dp,
+                        end = if (isCompactWatch) 2.dp else 8.dp
+                    ),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom
             ) {
@@ -459,22 +491,22 @@ fun GameplayScreen(viewModel: GameViewModel) {
                             text = "LEVEL $selectedLevel",
                             color = Color(0xFF22D3EE),
                             fontWeight = FontWeight.Black,
-                            fontSize = 15.sp,
-                            letterSpacing = 1.sp
+                            fontSize = if (isCompactWatch) 10.sp else 15.sp,
+                            letterSpacing = if (isCompactWatch) 0.5.sp else 1.sp
                         )
                         Text(
                             text = "TARGET: ${viewModel.getTargetScoreForLevel(selectedLevel)}",
                             color = Color(0xFFFFD700),
                             fontWeight = FontWeight.Bold,
-                            fontSize = 11.sp
+                            fontSize = if (isCompactWatch) 8.sp else 11.sp
                         )
                         Text(
                             text = score.toString(),
                             color = Color.White,
                             fontWeight = FontWeight.Black,
-                            fontSize = 34.sp,
-                            lineHeight = 38.sp,
-                            letterSpacing = (-1).sp
+                            fontSize = if (isCompactWatch) 16.sp else 34.sp,
+                            lineHeight = if (isCompactWatch) 18.sp else 38.sp,
+                            letterSpacing = if (isCompactWatch) 0.sp else (-1).sp
                         )
                     }
 
@@ -484,10 +516,10 @@ fun GameplayScreen(viewModel: GameViewModel) {
                             text = viewModel.getLevelDescription(selectedLevel),
                             color = Color(0xFF94A3B8),
                             fontWeight = FontWeight.Medium,
-                            fontSize = 12.sp,
+                            fontSize = if (isCompactWatch) 8.sp else 12.sp,
                             maxLines = 1
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(if (isCompactWatch) 2.dp else 4.dp))
                         val targetScore = viewModel.getTargetScoreForLevel(selectedLevel)
                         val progress = if (targetScore > 0) (score.toFloat() / targetScore.toFloat()).coerceIn(0f, 1f) else 0f
                         
@@ -496,17 +528,17 @@ fun GameplayScreen(viewModel: GameViewModel) {
                             color = Color(0xFF10B981),
                             trackColor = Color.White.copy(alpha = 0.1f),
                             modifier = Modifier
-                                .width(110.dp)
-                                .height(6.dp)
-                                .clip(RoundedCornerShape(3.dp))
-                                .border(1.dp, Color(0xFF10B981).copy(alpha = 0.3f), RoundedCornerShape(3.dp))
+                                .width(if (isCompactWatch) 55.dp else 110.dp)
+                                .height(if (isCompactWatch) 3.dp else 6.dp)
+                                .clip(RoundedCornerShape(if (isCompactWatch) 1.5.dp else 3.dp))
+                                .border(1.dp, Color(0xFF10B981).copy(alpha = 0.3f), RoundedCornerShape(if (isCompactWatch) 1.5.dp else 3.dp))
                         )
                         Spacer(modifier = Modifier.height(2.dp))
                         Text(
                             text = "${(progress * 100).toInt()}% READY",
                             color = Color.White.copy(alpha = 0.7f),
                             fontWeight = FontWeight.Bold,
-                            fontSize = 10.sp
+                            fontSize = if (isCompactWatch) 8.sp else 10.sp
                         )
                     }
                 } else {
@@ -516,16 +548,16 @@ fun GameplayScreen(viewModel: GameViewModel) {
                             text = "SCORE",
                             color = Color(0xFF22D3EE),
                             fontWeight = FontWeight.Bold,
-                            fontSize = 11.sp,
-                            letterSpacing = 2.sp
+                            fontSize = if (isCompactWatch) 8.sp else 11.sp,
+                            letterSpacing = if (isCompactWatch) 1.sp else 2.sp
                         )
                         Text(
                             text = score.toString(),
                             color = Color.White,
                             fontWeight = FontWeight.Black,
-                            fontSize = 38.sp,
-                            lineHeight = 42.sp,
-                            letterSpacing = (-1).sp
+                            fontSize = if (isCompactWatch) 18.sp else 38.sp,
+                            lineHeight = if (isCompactWatch) 20.sp else 42.sp,
+                            letterSpacing = if (isCompactWatch) 0.sp else (-1).sp
                         )
                     }
 
@@ -535,15 +567,15 @@ fun GameplayScreen(viewModel: GameViewModel) {
                             text = "BEST",
                             color = Color(0xFF94A3B8),
                             fontWeight = FontWeight.Bold,
-                            fontSize = 11.sp,
-                            letterSpacing = 2.sp
+                            fontSize = if (isCompactWatch) 8.sp else 11.sp,
+                            letterSpacing = if (isCompactWatch) 1.sp else 2.sp
                         )
                         Text(
                             text = highScore.toString(),
                             color = Color.White.copy(alpha = 0.85f),
                             fontWeight = FontWeight.Bold,
-                            fontSize = 22.sp,
-                            lineHeight = 26.sp
+                            fontSize = if (isCompactWatch) 14.sp else 22.sp,
+                            lineHeight = if (isCompactWatch) 16.sp else 26.sp
                         )
                     }
                 }
@@ -552,22 +584,25 @@ fun GameplayScreen(viewModel: GameViewModel) {
             // Combo Alert Banner styled as a floating pill badge
             Box(
                 modifier = Modifier
-                    .height(35.dp)
+                    .height(if (isCompactWatch) 16.dp else 35.dp)
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 if (comboCount > 1) {
                     Box(
                         modifier = Modifier
-                            .background(Color(0xFFFACC15), RoundedCornerShape(12.dp))
-                            .padding(horizontal = 14.dp, vertical = 4.dp)
+                            .background(Color(0xFFFACC15), RoundedCornerShape(if (isCompactWatch) 6.dp else 12.dp))
+                            .padding(
+                                horizontal = if (isCompactWatch) 6.dp else 14.dp,
+                                vertical = if (isCompactWatch) 2.dp else 4.dp
+                            )
                     ) {
                         Text(
                             text = "COMBO x$comboCount! 🔥",
                             color = Color.Black,
                             fontWeight = FontWeight.Black,
-                            fontSize = 12.sp,
-                            letterSpacing = 0.5.sp
+                            fontSize = if (isCompactWatch) 8.sp else 12.sp,
+                            letterSpacing = if (isCompactWatch) 0.2.sp else 0.5.sp
                         )
                     }
                 }
@@ -575,15 +610,19 @@ fun GameplayScreen(viewModel: GameViewModel) {
 
             // 10x10 Puzzle Board (Centered area)
             // Beautiful slate-900 equivalent backing with prominent slate-800 borders
+            val minDim = minOf(configuration.screenWidthDp, configuration.screenHeightDp)
+            val boardSize = if (isCompactWatch) (minDim * 0.58f).dp else 1000.dp
+            
             BoxWithConstraints(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f) // force square board
+                    .then(
+                        if (isCompactWatch) Modifier.size(boardSize) else Modifier.fillMaxWidth().aspectRatio(1f)
+                    )
                     .offset { IntOffset(shakeOffsetX.value.roundToInt(), shakeOffsetY.value.roundToInt()) }
-                    .clip(RoundedCornerShape(16.dp))
+                    .clip(RoundedCornerShape(if (isCompactWatch) 8.dp else 16.dp))
                     .background(Color(0x800F172A)) // bg-slate-900/50
-                    .border(3.dp, Color(0x661E293B), RoundedCornerShape(16.dp)) // border-4 border-slate-800/40
-                    .padding(8.dp) // p-2
+                    .border(if (isCompactWatch) 1.5.dp else 3.dp, Color(0x661E293B), RoundedCornerShape(if (isCompactWatch) 8.dp else 16.dp)) // border-4 border-slate-800/40
+                    .padding(if (isCompactWatch) 2.dp else 8.dp) // p-2
                     .onGloballyPositioned { boardCoordinates = it }
             ) {
                 val cellSize = maxWidth / 10f
@@ -621,7 +660,7 @@ fun GameplayScreen(viewModel: GameViewModel) {
                                     modifier = Modifier
                                         .weight(1f)
                                         .aspectRatio(1f)
-                                        .padding(1.5.dp)
+                                        .padding(if (isCompactWatch) 0.5.dp else 1.5.dp)
                                 )
                             }
                         }
@@ -635,26 +674,34 @@ fun GameplayScreen(viewModel: GameViewModel) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(if (isCompactWatch) 4.dp else 16.dp))
 
             // Bottom tray supporting 3 piece docks matching `bg-white/5 rounded-xl border border-white/10`
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0x0FFFFFFF), RoundedCornerShape(16.dp))
-                    .border(1.dp, Color(0x1FDDDDDD), RoundedCornerShape(16.dp))
-                    .padding(vertical = 12.dp, horizontal = 10.dp),
+                    .background(Color(0x0FFFFFFF), RoundedCornerShape(if (isCompactWatch) 8.dp else 16.dp))
+                    .border(1.dp, Color(0x1FDDDDDD).copy(alpha = if (isCompactWatch) 0.05f else 0.12f), RoundedCornerShape(if (isCompactWatch) 8.dp else 16.dp))
+                    .padding(
+                        vertical = if (isCompactWatch) 4.dp else 12.dp,
+                        horizontal = if (isCompactWatch) 4.dp else 10.dp
+                    ),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val slotSize = if (isCompactWatch) 42.dp else 92.dp
+                val trayCellSize = if (isCompactWatch) 6.dp else 14.dp
+                val traysCellPadding = if (isCompactWatch) 0.5.dp else 1.dp
+                val visualUpwardOffsetY = if (isCompactWatch) -40f else -130f
+
                 for (slotIndex in 0..2) {
                     val shape = if (slotIndex < tray.size) tray[slotIndex] else null
                     
                     Box(
                         modifier = Modifier
-                            .size(92.dp)
-                            .background(Color.White.copy(alpha = 0.05f), RoundedCornerShape(12.dp))
-                            .border(1.dp, Color.White.copy(alpha = 0.1f), RoundedCornerShape(12.dp))
+                            .size(slotSize)
+                            .background(Color.White.copy(alpha = 0.05f), RoundedCornerShape(if (isCompactWatch) 6.dp else 12.dp))
+                            .border(1.dp, Color.White.copy(alpha = 0.1f), RoundedCornerShape(if (isCompactWatch) 6.dp else 12.dp))
                             .onGloballyPositioned { coords ->
                                 if (shape != null) {
                                     slotCoordinates[shape.id] = coords
@@ -698,9 +745,6 @@ fun GameplayScreen(viewModel: GameViewModel) {
                                                     val shapeW = shape.width * cellWidthPx
                                                     val shapeH = shape.height * cellWidthPx
  
-                                                    // Visual thumb offset (shift piece upwards slightly)
-                                                    val visualUpwardOffsetY = -130f
-                                                    
                                                     val sLeft = rootTouchX - shapeW / 2f
                                                     val sTop = rootTouchY - shapeH / 2f + visualUpwardOffsetY
  
@@ -734,7 +778,6 @@ fun GameplayScreen(viewModel: GameViewModel) {
  
                                                     val shapeW = shape.width * cellWidthPx
                                                     val shapeH = shape.height * cellWidthPx
-                                                    val visualUpwardOffsetY = -130f
  
                                                     val sLeft = rootTouchX - shapeW / 2f
                                                     val sTop = rootTouchY - shapeH / 2f + visualUpwardOffsetY
@@ -765,7 +808,7 @@ fun GameplayScreen(viewModel: GameViewModel) {
                                         )
                                     },
                                 contentAlignment = Alignment.Center
-                            ) {
+                             ) {
                                 // Draw miniaturized block shapes inside tray dock
                                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                     for (r in 0 until shape.height) {
@@ -774,8 +817,8 @@ fun GameplayScreen(viewModel: GameViewModel) {
                                                 val cellVal = shape.grid[r][c]
                                                 Box(
                                                     modifier = Modifier
-                                                        .size(14.dp)
-                                                        .padding(1.dp)
+                                                        .size(trayCellSize)
+                                                        .padding(traysCellPadding)
                                                 ) {
                                                     if (cellVal == 1) {
                                                         BlockTile(colorIndex = shape.colorIndex, modifier = Modifier.fillMaxSize())
@@ -791,22 +834,28 @@ fun GameplayScreen(viewModel: GameViewModel) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(if (isCompactWatch) 4.dp else 16.dp))
 
             // Footer bar matching the HTML specification exactly
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 4.dp)
+                    .padding(
+                        horizontal = if (isCompactWatch) 4.dp else 16.dp,
+                        vertical = if (isCompactWatch) 2.dp else 4.dp
+                    )
                     .alpha(0.6f),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                val footerBtnSize = if (isCompactWatch) 26.dp else 40.dp
+                val footerIconSize = if (isCompactWatch) 14.dp else 20.dp
+
                 // Settings button on Left: `w-10 h-10 rounded-full border border-white/20 flex items-center justify-center`
                 IconButton(
                     onClick = { viewModel.setScreen(GameScreen.SETTINGS) },
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(footerBtnSize)
                         .background(Color.Transparent, CircleShape)
                         .border(1.dp, Color.White.copy(alpha = 0.2f), CircleShape)
                 ) {
@@ -814,12 +863,12 @@ fun GameplayScreen(viewModel: GameViewModel) {
                         imageVector = Icons.Default.Settings,
                         contentDescription = "Settings",
                         tint = Color.White,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(footerIconSize)
                     )
                 }
 
                 // Action buttons on Right (Quick Mute, Restart, and Pause side-by-side)
-                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Row(horizontalArrangement = Arrangement.spacedBy(if (isCompactWatch) 6.dp else 16.dp)) {
                     // Quick Mute / Unmute Speaker Toggle Button
                     IconButton(
                         onClick = {
@@ -827,14 +876,14 @@ fun GameplayScreen(viewModel: GameViewModel) {
                             viewModel.toggleSound()
                         },
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(footerBtnSize)
                             .background(Color.Transparent, CircleShape)
                             .border(1.dp, Color.White.copy(alpha = 0.2f), CircleShape)
                             .testTag("mute_unmute_button")
                     ) {
                         SpeakerIcon(
                             enabled = soundEnabled,
-                            modifier = Modifier.size(18.dp)
+                            modifier = Modifier.size(if (isCompactWatch) 13.dp else 18.dp)
                         )
                     }
 
@@ -842,7 +891,7 @@ fun GameplayScreen(viewModel: GameViewModel) {
                     IconButton(
                         onClick = { viewModel.startNewGame() },
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(footerBtnSize)
                             .background(Color.Transparent, CircleShape)
                             .border(1.dp, Color.White.copy(alpha = 0.2f), CircleShape)
                     ) {
@@ -850,7 +899,7 @@ fun GameplayScreen(viewModel: GameViewModel) {
                             imageVector = Icons.Default.Refresh,
                             contentDescription = "Restart Game",
                             tint = Color.White,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(footerIconSize)
                         )
                     }
 
@@ -858,23 +907,25 @@ fun GameplayScreen(viewModel: GameViewModel) {
                     IconButton(
                         onClick = { showPauseDialog = true },
                         modifier = Modifier
-                            .size(40.dp)
+                            .size(footerBtnSize)
                             .background(Color.Transparent, CircleShape)
                             .border(1.dp, Color.White.copy(alpha = 0.2f), CircleShape)
                             .testTag("pause_button")
                     ) {
-                        CustomPauseIcon(modifier = Modifier.height(12.dp))
+                        CustomPauseIcon(modifier = Modifier.height(if (isCompactWatch) 8.dp else 12.dp))
                     }
                 }
             }
         }
 
         // Anchor Banner Ad to the bottom-center of the Gameplay screen
-        AdManager.BannerAdView(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        )
+        if (!isCompactWatch) {
+            AdManager.BannerAdView(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            )
+        }
 
         // 100% SCALE FLOATING OVERLAY: Renders the active dragging shape following the finger coordinates
         if (activeDragId != null && activeDragShape != null) {
@@ -883,6 +934,7 @@ fun GameplayScreen(viewModel: GameViewModel) {
             val dragOffset = dragOffsets[sId] ?: Offset.Zero
             val slotCoord = slotCoordinates[sId]
             val boardCoord = boardCoordinates
+            val visualUpwardOffsetY = if (isCompactWatch) -40f else -130f
 
             if (slotCoord != null && boardCoord != null) {
                 val slotInRoot = slotCoord.positionInRoot()
@@ -894,8 +946,6 @@ fun GameplayScreen(viewModel: GameViewModel) {
                 val shapeW = sCur.width * cellWidthDp
                 val shapeH = sCur.height * cellWidthDp
                 
-                // Keep the center of the shape aligned with finger but shifted upwards by 50dp
-                val visualUpwardOffsetY = -130f
                 val shapeLeft = fingerRootX - shapeW / 2f
                 val shapeTop = fingerRootY - shapeH / 2f + visualUpwardOffsetY
 
@@ -917,7 +967,7 @@ fun GameplayScreen(viewModel: GameViewModel) {
                                     Box(
                                         modifier = Modifier
                                             .size(singleCellDp)
-                                            .padding(1.5.dp)
+                                            .padding(if (isCompactWatch) 0.5.dp else 1.5.dp)
                                     ) {
                                         if (cellVal == 1) {
                                             BlockTile(
@@ -1019,6 +1069,8 @@ fun SettingsScreen(viewModel: GameViewModel) {
     val soundEnabled by viewModel.soundEnabled.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = context as? Activity
+    val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+    val isCompactWatch = configuration.screenWidthDp < 450 || configuration.screenHeightDp < 450
 
     Box(
         modifier = Modifier
@@ -1030,28 +1082,33 @@ fun SettingsScreen(viewModel: GameViewModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(bottom = 60.dp, start = 24.dp, end = 24.dp, top = 16.dp),
+                .padding(
+                    bottom = if (isCompactWatch) 10.dp else 60.dp,
+                    start = if (isCompactWatch) 10.dp else 24.dp,
+                    end = if (isCompactWatch) 10.dp else 24.dp,
+                    top = if (isCompactWatch) 8.dp else 16.dp
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(20.dp)
+            verticalArrangement = Arrangement.spacedBy(if (isCompactWatch) 10.dp else 20.dp)
         ) {
             // Title banner with geometric cyan icon highlight
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = if (isCompactWatch) 2.dp else 8.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Settings,
                     contentDescription = null,
                     tint = Color(0xFF22D3EE),
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier.size(if (isCompactWatch) 32.dp else 48.dp)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(if (isCompactWatch) 4.dp else 8.dp))
                 Text(
                     text = "SETTINGS",
                     color = Color.White,
                     fontWeight = FontWeight.ExtraBold,
-                    fontSize = 24.sp,
-                    letterSpacing = 3.sp
+                    fontSize = if (isCompactWatch) 16.sp else 24.sp,
+                    letterSpacing = if (isCompactWatch) 1.5.sp else 3.sp
                 )
             }
 
@@ -1059,10 +1116,10 @@ fun SettingsScreen(viewModel: GameViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color(0x501E293B), RoundedCornerShape(16.dp))
-                    .border(1.dp, Color.White.copy(alpha = 0.08f), RoundedCornerShape(16.dp))
-                    .padding(24.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp)
+                    .background(Color(0x501E293B), RoundedCornerShape(if (isCompactWatch) 8.dp else 16.dp))
+                    .border(1.dp, Color.White.copy(alpha = 0.08f), RoundedCornerShape(if (isCompactWatch) 8.dp else 16.dp))
+                    .padding(if (isCompactWatch) 12.dp else 24.dp),
+                verticalArrangement = Arrangement.spacedBy(if (isCompactWatch) 12.dp else 20.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -1072,20 +1129,20 @@ fun SettingsScreen(viewModel: GameViewModel) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         SpeakerIcon(
                             enabled = soundEnabled,
-                            modifier = Modifier.size(24.dp)
+                            modifier = Modifier.size(if (isCompactWatch) 18.dp else 24.dp)
                         )
-                        Spacer(modifier = Modifier.width(12.dp))
+                        Spacer(modifier = Modifier.width(if (isCompactWatch) 6.dp else 12.dp))
                         Column {
                             Text(
                                 text = "Sound & Music",
                                 color = Color.White,
                                 fontWeight = FontWeight.SemiBold,
-                                fontSize = 16.sp
+                                fontSize = if (isCompactWatch) 12.sp else 16.sp
                             )
                             Text(
-                                text = "Background melody and sound effects",
+                                text = "Melody and sound effects",
                                 color = Color(0xFF94A3B8),
-                                fontSize = 12.sp
+                                fontSize = if (isCompactWatch) 9.sp else 12.sp
                             )
                         }
                     }
@@ -1096,7 +1153,9 @@ fun SettingsScreen(viewModel: GameViewModel) {
                             checkedThumbColor = Color(0xFF06B6D4), // Cyan-500
                             checkedTrackColor = Color(0x6606B6D4)  // half opacity Cyan
                         ),
-                        modifier = Modifier.testTag("sound_toggle")
+                        modifier = Modifier
+                            .scale(if (isCompactWatch) 0.75f else 1.0f)
+                            .testTag("sound_toggle")
                     )
                 }
 
@@ -1108,36 +1167,38 @@ fun SettingsScreen(viewModel: GameViewModel) {
                         imageVector = Icons.Default.Info,
                         contentDescription = null,
                         tint = Color(0xFF10B981), // Emerald-500
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(if (isCompactWatch) 18.dp else 24.dp)
                     )
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(if (isCompactWatch) 6.dp else 12.dp))
                     Column {
                         Text(
                             text = "How to Play",
                             color = Color.White,
                             fontWeight = FontWeight.SemiBold,
-                            fontSize = 16.sp
+                            fontSize = if (isCompactWatch) 12.sp else 16.sp
                         )
-                        Spacer(modifier = Modifier.height(4.dp))
+                        Spacer(modifier = Modifier.height(2.dp))
                         Text(
-                            text = "• Drag blocks from the bottom tray onto the 10x10 board.\n" +
-                                    "• Fill columns or horizontal rows to clear lines.\n" +
-                                    "• Clear multiple rows/columns together for COMBO multiplier points!\n" +
-                                    "• No time limit. Game ends when no tray pieces can fit anywhere.",
+                            text = "• Drag blocks from tray to board.\n" +
+                                    "• Fill rows/columns to clear them.\n" +
+                                    "• Earn multiplier chain COMBOs!\n" +
+                                    "• Game ends when no move fits.",
                             color = Color(0xFFCBD5E1),
-                            fontSize = 13.sp,
-                            lineHeight = 18.sp
+                            fontSize = if (isCompactWatch) 10.sp else 13.sp,
+                            lineHeight = if (isCompactWatch) 13.sp else 18.sp
                         )
                     }
                 }
             }
 
             // Beautiful AdMob Native Ad Card in settings view
-            AdManager.NativeAdCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 4.dp)
-            )
+            if (!isCompactWatch) {
+                AdManager.NativeAdCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 4.dp)
+                )
+            }
 
             // Back button styled with the elegant cyan transparent borders style
             Button(
@@ -1148,29 +1209,31 @@ fun SettingsScreen(viewModel: GameViewModel) {
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color.Transparent
                 ),
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(if (isCompactWatch) 8.dp else 12.dp),
                 modifier = Modifier
-                    .fillMaxWidth(0.85f)
-                    .height(56.dp)
-                    .border(1.dp, Color(0xFF22D3EE).copy(alpha = 0.4f), RoundedCornerShape(12.dp))
+                    .fillMaxWidth(if (isCompactWatch) 0.95f else 0.85f)
+                    .height(if (isCompactWatch) 36.dp else 56.dp)
+                    .border(1.dp, Color(0xFF22D3EE).copy(alpha = 0.4f), RoundedCornerShape(if (isCompactWatch) 8.dp else 12.dp))
                     .testTag("back_button")
             ) {
                 Text(
                     text = "BACK TO MENU",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    letterSpacing = 1.sp
+                    fontSize = if (isCompactWatch) 11.sp else 16.sp,
+                    letterSpacing = if (isCompactWatch) 0.5.sp else 1.sp
                 )
             }
         }
 
         // Anchor Banner Ad to bottom center of Settings
-        AdManager.BannerAdView(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-        )
+        if (!isCompactWatch) {
+            AdManager.BannerAdView(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+            )
+        }
     }
 }
 
@@ -1472,39 +1535,41 @@ fun LevelSelectionScreen(viewModel: GameViewModel) {
     val maxUnlockedLevel by viewModel.maxUnlockedLevel.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = context as? Activity
+    val configuration = androidx.compose.ui.platform.LocalConfiguration.current
+    val isCompactWatch = configuration.screenWidthDp < 450 || configuration.screenHeightDp < 450
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .statusBarsPadding()
             .navigationBarsPadding()
-            .padding(24.dp),
+            .padding(if (isCompactWatch) 6.dp else 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         // Header
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = if (isCompactWatch) 2.dp else 16.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Star,
                 contentDescription = null,
                 tint = Color(0xFFFACC15),
-                modifier = Modifier.size(42.dp)
+                modifier = Modifier.size(if (isCompactWatch) 24.dp else 42.dp)
             )
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(if (isCompactWatch) 4.dp else 10.dp))
             Text(
                 text = "CAMPAIGN",
                 color = Color.White,
                 fontWeight = FontWeight.Black,
-                fontSize = 28.sp,
-                letterSpacing = 3.sp
+                fontSize = if (isCompactWatch) 16.sp else 28.sp,
+                letterSpacing = if (isCompactWatch) 1.5.sp else 3.sp
             )
             Text(
-                text = "Reach the targets to unlock levels",
+                text = "Reach targets to unlock",
                 color = Color(0xFF94A3B8),
-                fontSize = 14.sp
+                fontSize = if (isCompactWatch) 10.sp else 14.sp
             )
         }
 
@@ -1513,39 +1578,39 @@ fun LevelSelectionScreen(viewModel: GameViewModel) {
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .padding(vertical = 20.dp),
+                .padding(vertical = if (isCompactWatch) 6.dp else 20.dp),
             contentAlignment = Alignment.Center
         ) {
             val levelRows = remember { GameViewModel.levelsList.chunked(2) }
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(if (isCompactWatch) 6.dp else 12.dp)
             ) {
                 items(levelRows) { row ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(if (isCompactWatch) 6.dp else 12.dp)
                     ) {
                         for (level in row) {
                             val isUnlocked = level.levelNo <= maxUnlockedLevel
                             Box(
                                 modifier = Modifier
                                     .weight(1f)
-                                    .aspectRatio(1.4f)
-                                    .clip(RoundedCornerShape(16.dp))
+                                    .aspectRatio(if (isCompactWatch) 1.8f else 1.4f)
+                                    .clip(RoundedCornerShape(if (isCompactWatch) 8.dp else 16.dp))
                                     .background(
                                         if (isUnlocked) Color(0x1F22D3EE) else Color(0x151E293B)
                                     )
                                     .border(
                                         width = 1.2.dp,
                                         color = if (isUnlocked) Color(0xFF22D3EE).copy(alpha = 0.5f) else Color.White.copy(alpha = 0.08f),
-                                        shape = RoundedCornerShape(16.dp)
+                                        shape = RoundedCornerShape(if (isCompactWatch) 8.dp else 16.dp)
                                     )
                                     .clickable(enabled = isUnlocked) {
                                         activity?.let { AdManager.recordClickValue(it) }
                                         viewModel.startLevelGame(level.levelNo)
                                     }
-                                    .padding(12.dp)
+                                    .padding(if (isCompactWatch) 6.dp else 12.dp)
                             ) {
                                 Column(
                                     modifier = Modifier.fillMaxSize(),
@@ -1560,14 +1625,14 @@ fun LevelSelectionScreen(viewModel: GameViewModel) {
                                             text = "LVL ${level.levelNo}",
                                             color = if (isUnlocked) Color.White else Color.White.copy(alpha = 0.3f),
                                             fontWeight = FontWeight.Black,
-                                            fontSize = 18.sp
+                                            fontSize = if (isCompactWatch) 12.sp else 18.sp
                                         )
                                         if (isUnlocked) {
                                             if (level.levelNo < maxUnlockedLevel) {
                                                 // Completed level
                                                 Box(
                                                     modifier = Modifier
-                                                        .size(18.dp)
+                                                        .size(if (isCompactWatch) 12.dp else 18.dp)
                                                         .background(Color(0xFF10B981), CircleShape),
                                                     contentAlignment = Alignment.Center
                                                 ) {
@@ -1575,14 +1640,14 @@ fun LevelSelectionScreen(viewModel: GameViewModel) {
                                                         imageVector = Icons.Default.PlayArrow,
                                                         contentDescription = null,
                                                         tint = Color.White,
-                                                        modifier = Modifier.size(10.dp)
+                                                        modifier = Modifier.size(if (isCompactWatch) 6.dp else 10.dp)
                                                     )
                                                 }
                                             } else {
                                                 // Unlocked current level
                                                 Box(
                                                     modifier = Modifier
-                                                        .size(18.dp)
+                                                        .size(if (isCompactWatch) 12.dp else 18.dp)
                                                         .background(Color(0xFF06B6D4), CircleShape),
                                                     contentAlignment = Alignment.Center
                                                 ) {
@@ -1590,7 +1655,7 @@ fun LevelSelectionScreen(viewModel: GameViewModel) {
                                                         imageVector = Icons.Default.PlayArrow,
                                                         contentDescription = null,
                                                         tint = Color.White,
-                                                        modifier = Modifier.size(10.dp)
+                                                        modifier = Modifier.size(if (isCompactWatch) 6.dp else 10.dp)
                                                     )
                                                 }
                                             }
@@ -1600,7 +1665,7 @@ fun LevelSelectionScreen(viewModel: GameViewModel) {
                                                 imageVector = Icons.Default.Info,
                                                 contentDescription = "Locked",
                                                 tint = Color.White.copy(alpha = 0.2f),
-                                                modifier = Modifier.size(18.dp)
+                                                modifier = Modifier.size(if (isCompactWatch) 11.dp else 18.dp)
                                             )
                                         }
                                     }
@@ -1610,15 +1675,15 @@ fun LevelSelectionScreen(viewModel: GameViewModel) {
                                             text = level.description,
                                             color = if (isUnlocked) Color(0xFFCBD5E1) else Color.White.copy(alpha = 0.2f),
                                             fontWeight = FontWeight.Medium,
-                                            fontSize = 12.sp,
+                                            fontSize = if (isCompactWatch) 9.sp else 12.sp,
                                             maxLines = 1
                                         )
-                                        Spacer(modifier = Modifier.height(2.dp))
+                                        Spacer(modifier = Modifier.height(1.dp))
                                         Text(
                                             text = "Target: ${level.targetScore}",
                                             color = if (isUnlocked) Color(0xFF22D3EE) else Color.White.copy(alpha = 0.2f),
                                             fontWeight = FontWeight.Bold,
-                                            fontSize = 11.sp
+                                            fontSize = if (isCompactWatch) 9.sp else 11.sp
                                         )
                                     }
                                 }
@@ -1630,11 +1695,13 @@ fun LevelSelectionScreen(viewModel: GameViewModel) {
         }
 
         // Native Ad
-        AdManager.NativeAdCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 12.dp)
-        )
+        if (!isCompactWatch) {
+            AdManager.NativeAdCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp)
+            )
+        }
 
         // Back Button
         Button(
@@ -1643,19 +1710,19 @@ fun LevelSelectionScreen(viewModel: GameViewModel) {
                 viewModel.setScreen(GameScreen.MAIN_MENU)
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(if (isCompactWatch) 8.dp else 12.dp),
             modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .height(54.dp)
-                .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(12.dp))
+                .fillMaxWidth(if (isCompactWatch) 0.95f else 0.9f)
+                .height(if (isCompactWatch) 36.dp else 54.dp)
+                .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(if (isCompactWatch) 8.dp else 12.dp))
                 .testTag("back_to_menu_button")
         ) {
             Text(
                 text = "BACK TO MENU",
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
-                fontSize = 14.sp,
-                letterSpacing = 1.sp
+                fontSize = if (isCompactWatch) 11.sp else 14.sp,
+                letterSpacing = if (isCompactWatch) 0.5.sp else 1.sp
             )
         }
     }
