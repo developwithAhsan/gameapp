@@ -69,9 +69,9 @@ object AdManager {
     private var mRewardedInterstitialAd: RewardedInterstitialAd? = null
     private var loadedNativeAd: NativeAd? = null
 
-    // Click Counter tracking
-    private var clickCounter = 0
-    private const val CLICKS_BEFORE_INTERSTITIAL = 6
+    // Timed and Counter tracking
+    private var lastAdShowTimeMs = 0L
+    private const val AD_MIN_INTERVAL_MS = 5 * 60 * 1000L // 5 minutes in milliseconds
 
     var onNativeAdLoaded: ((NativeAd) -> Unit)? = null
 
@@ -80,6 +80,7 @@ object AdManager {
      */
     fun init(context: Context) {
         Log.d(TAG, "Initializing Google Mobile Ads SDK...")
+        lastAdShowTimeMs = System.currentTimeMillis() // initialize on launch
         MobileAds.initialize(context) { status ->
             Log.d(TAG, "MobileAds initialized: $status")
             // Load Ads early in the background
@@ -99,12 +100,16 @@ object AdManager {
      * Tracks a click or action, displaying an ad periodically.
      */
     fun recordClickValue(activity: Activity) {
-        clickCounter++
-        Log.d(TAG, "Current internal ad-click count: $clickCounter")
-        if (clickCounter >= CLICKS_BEFORE_INTERSTITIAL) {
-            clickCounter = 0
+        val currentTime = System.currentTimeMillis()
+        if (lastAdShowTimeMs == 0L) {
+            lastAdShowTimeMs = currentTime
+            return
+        }
+        val elapsed = currentTime - lastAdShowTimeMs
+        Log.d(TAG, "Time elapsed since last interstitial: ${elapsed / 1000} seconds")
+        if (elapsed >= AD_MIN_INTERVAL_MS) {
             showInterstitial(activity) {
-                Log.d(TAG, "Interstitial completed after click threshold")
+                Log.d(TAG, "Interstitial completed after 5 minutes minimum interval")
             }
         }
     }
@@ -172,10 +177,12 @@ object AdManager {
     fun showInterstitial(activity: Activity, onAdDismissed: () -> Unit) {
         val ad = mInterstitialAd
         if (ad != null) {
+            lastAdShowTimeMs = System.currentTimeMillis() // Reset timer early
             ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
                     Log.d(TAG, "Interstitial Ad dismissed")
                     mInterstitialAd = null
+                    lastAdShowTimeMs = System.currentTimeMillis() // Reset timer on dismiss
                     loadInterstitial(activity.applicationContext) // Reload for next use
                     onAdDismissed()
                 }

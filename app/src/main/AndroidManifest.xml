@@ -2,24 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <attribution
-        android:tag="play-services-ads"
-        android:label="@string/app_name" />
-    <attribution
-        android:tag="play-services-ads-lite"
-        android:label="@string/app_name" />
-    <attribution
-        android:tag="com.google.android.gms"
-        android:label="@string/app_name" />
-    <attribution
-        android:tag="com.google.android.gms.ads"
-        android:label="@string/app_name" />
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- Declare watch hardware compatibility without forcing it to allow hybrid builds on phones -->
-    <uses-feature android:name="android.hardware.type.watch" android:required="false" />
+    <!-- Declare watch hardware compatibility as required for standalone watch apps -->
+    <uses-feature android:name="android.hardware.type.watch" android:required="true" />
 
     <application
         android:allowBackup="true"

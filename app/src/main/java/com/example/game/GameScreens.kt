@@ -1737,6 +1737,16 @@ fun LevelCompleteDialog(
     onLevelSelection: () -> Unit,
     onQuit: () -> Unit
 ) {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    LaunchedEffect(levelNo) {
+        val activity = context as? android.app.Activity
+        if (activity != null) {
+            AdManager.showInterstitial(activity) {
+                android.util.Log.d("LevelCompleteDialog", "Interstitial shown automatically on level complete")
+            }
+        }
+    }
+
     Dialog(
         onDismissRequest = {},
         properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
